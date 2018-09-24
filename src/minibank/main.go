@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// Connect to the database
-	dbConn := fmt.Sprintf("minibank:minibank@tcp(database)/minibank")
+	dbConn := fmt.Sprintf("minibank:minibank@tcp(mariadb)/minibank")
 	models.InitDB(dbConn)
 	defer models.Database.Close()
 	http.HandleFunc("/api/account/register", handlers.RegisterHandler)

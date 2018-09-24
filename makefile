@@ -6,13 +6,13 @@ network:
 	docker network create minibanknet
 
 minibank: bin/minibank
-	docker build -t minibank ./src/
+	docker build -t minibank ./src/.
 
 database: 
 	docker build -t database ./mariadb/
 run-targets: minibank database
-	docker run --rm -d --name mariadb -e MYSQL_ROOT_PASSWORD=hobbes -v `pwd`/mariadb:/docker-entrypoint-initdb.d:ro -d --network minibanknet mariadb:latest
-	docker run --rm -d --name minibank -p 80:80  minibank 
+	docker run --rm -d --name mariadb -e MYSQL_ROOT_PASSWORD=hobbes -v `pwd`/mariadb:/docker-entrypoint-initdb.d:ro -d --link minibank --net minibanknet mariadb:latest
+	docker run --rm -d --name minibank -p 80:8080  minibank 
 	
 
 bin/minibank: $(shell find $(SRCDIR) -name '*.go')
