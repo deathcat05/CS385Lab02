@@ -13,8 +13,8 @@ mariadb:
 
 
 run-targets: minibank mariadb
-	docker run --rm -d --name mariadb -e MYSQL_ROOT_PASSWORD=hobbes -v `pwd`/mariadb:/docker-entrypoint-initdb.d:ro -d --net minibanknet mariadb:latest
-	docker run --rm -d  --name minibank -p 80:8080  --net minibanknet minibank 
+	docker run  -d --name mariadb -e MYSQL_ROOT_PASSWORD=blackdiamond -v `pwd`/mariadb:/docker-entrypoint-initdb.d:ro --net minibanknet --link minibank mariadb
+	docker run  -d  --name minibank -p 80:8080  --net minibanknet minibank 
 	
 
 bin/minibank: $(shell find $(SRCDIR) -name '*.go')
@@ -29,5 +29,7 @@ clean:
 	@echo "Cleaning"
 	sudo rm -rf bin pkg ./src/github.com ./src/golang.org
 	docker stop mariadb
+	docker rm mariadb
+	docker rm minibank
 	docker network rm minibanknet
 	
